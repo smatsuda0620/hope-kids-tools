@@ -1,5 +1,5 @@
-const path = require('path')
-const { VueLoaderPlugin } = require("vue-loader");
+const path = require('path');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
   // エントリポイントのファイル
@@ -17,25 +17,37 @@ module.exports = {
   plugins: [new VueLoaderPlugin()],
   devtool: 'inline-source-map',
   module: {
-    rules:[
-        { 
-          test: /\.vue$/,
-          loader: 'vue-loader',
-        },
-        {
-          test: /\.css$/,
-          use: ['vue-style-loader', 'css-loader']
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            scss: 'vue-style-loader!css-loader!sass-loader', // <style lang="scss">
+            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax' // <style lang="sass">
+          }
         }
+      }, {
+        test: /\.css$/,
+        use: ['vue-style-loader', 'css-loader']
+      }, {
+        test: /\.scss$/,
+        use: [
+          'style-loader', // creates style nodes from JS strings
+          'css-loader', // translates CSS into CommonJS
+          'sass-loader' // compiles Sass to CSS, using Node Sass by default
+        ]
+      }
     ]
   },
   resolve: {
     extensions: ['.js', '.vue'],
     modules: [
-        "node_modules"
+      'node_modules'
     ],
     alias: {
-        // vue.js のビルドを指定する
-        vue$: 'vue/dist/vue.common.js'
+      // vue.js のビルドを指定する
+      vue$: 'vue/dist/vue.common.js'
     }
   },
-}
+};
