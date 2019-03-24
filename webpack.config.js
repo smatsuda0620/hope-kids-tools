@@ -1,5 +1,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   // エントリポイントのファイル
@@ -14,7 +15,12 @@ module.exports = {
     // webpackの扱わないファイル(HTMLや画像など)が入っているディレクトリ
     contentBase: path.resolve(__dirname, 'public')
   },
-  plugins: [new VueLoaderPlugin()],
+  plugins: [
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html'
+    })
+  ],
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -47,7 +53,8 @@ module.exports = {
     ],
     alias: {
       // vue.js のビルドを指定する
-      vue$: 'vue/dist/vue.common.js'
+      vue$: 'vue/dist/vue.common.js',
+      components: path.resolve(__dirname, 'components')
     }
   },
 };
