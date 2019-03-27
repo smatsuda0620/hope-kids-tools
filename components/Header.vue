@@ -3,7 +3,6 @@
     <header class="header">
       <h1 class="uk-heading-primary header-title">For Kids</h1>
       <div class="uk-position-top-right">
-        <!-- ログイン時にはフォームとログアウトボタンを表示 -->
         <div v-if="user.uid" key="login" class="uk-padding-small">
           <div class="uk-inline">
             <img class="uk-border-circle" :src="user.photoURL" width="40" height="40">
@@ -20,25 +19,25 @@
                   </div>
                 </div>
                 <div class="uk-card-footer">
-                  <a href="" uk-icon="sign-out">サインアウト </a>
+                  <button @click="$emit('logout')" uk-icon="sign-out">サインアウト </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <!-- 未ログイン時にはログインボタンを表示 -->
-        <div v-else key="logout" class="uk-padding-small">
-          <button type="button" @click="$emit(doLogin)" class="uk-button uk-button-secondary">ログイン</button>
+        <div v-else key="login" class="uk-padding-small">
+          <button type="button" @click="$emit('login')" class="uk-button uk-button-secondary">ログイン</button>
         </div>
       </div>
     </header>
   </div>
 </template>
-<<script>
+<script>
 export default {
   name: 'Header',
   props: {
     user: Object
   }
 }
-</script>>
+</script>

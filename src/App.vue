@@ -1,7 +1,6 @@
 <template>
   <div>
-    <Header v-bind:user='user'></Header>
-    <!--　Firebase から取得したリストを描画（トランジション付き）　-->
+    <Header v-bind:user='user' v-on:login="doLogin()" v-on:logout="doLogout()"></Header>
     <div v-if="loading" class="uk-position-center" uk-spinner="ratio: 3"></div>
     <div v-else>
         <table class="uk-table uk-table-striped">
@@ -68,6 +67,21 @@ import firebase from 'firebase'
 
 import UIkit from 'uikit';
 import Header from 'components/Header'
+import Icons from 'uikit/dist/js/uikit-icons';
+
+UIkit.use(Icons);
+
+const config = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
+};
+
+// Initialize Firebase
+firebase.initializeApp(config);
 
 export default {
   components: { Header },
@@ -98,43 +112,29 @@ export default {
       const ref_list = firebase.database().ref('list')
       if (user) {
         this.list = []
-        // message に変更があったときのハンドラを登録
         ref_list.on('child_added', this.childAdded)
         ref_list.on('child_removed', this.childRemoved)
         ref_list.on('child_changed', this.childChanged)
         this.loading = false;
       } else {
-        // message に変更があったときのハンドラを解除
         ref_list.off('child_added', this.childAdded)
       }
     })
   },
   computed: {
     fullname : function () {
-      return this.familiyname + '' + this.secondname
+      return this.familyname + ' ' + this.secondname
     },
     notAllowed : function () {
       return this.fullname.length === 0 || this.age.length === 0 
     }
   },
   methods: {
-    // ログイン処理
-    doLogin() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-    },
-    // ログアウト処理
-    doLogout() {
-      firebase.auth().signOut()
-    },
-    // スクロール位置を一番下に移動
     scrollBottom() {
       this.$nextTick(() => {
         window.scrollTo(0, document.body.clientHeight)
       })
     },
-    // 受け取ったメッセージをchatに追加
-    // データベースに新しい要素が追加されると随時呼び出される
     childAdded(snap) {
       const profile = snap.val()
       this.list.push({
@@ -177,14 +177,13 @@ export default {
               UIkit.notification({message: 'ユーザの追加に失敗しました。', status:'danger'})
             } else {
               UIkit.notification({message: this.name + 'を追加しました', status:'success'})
-              this.familyname = ''; // フォームを空にする
-              this.secondname = ''; // フォームを空にする
+              this.familyname = '';
+              this.secondname = '';
               this.age = '';
               UIkit.modal(document.getElementById('modal-sections')).hide();
             }
           })
         } else {
-          // firebase にメンバーを追加
           firebase.database().ref('list').push({
             familyname: this.familyname,
             secondname: this.secondname,
@@ -194,8 +193,8 @@ export default {
               UIkit.notification({message: 'ユーザの追加に失敗しました。', status:'danger'})
             } else {
               UIkit.notification({message: this.fullname + 'を追加しました', status:'success'})
-              this.familyname = ''; // フォームを空にする
-              this.secondname = ''; // フォームを空にする
+              this.familyname = '';
+              this.secondname = '';
               this.age = '';
               UIkit.modal(document.getElementById('modal-sections')).hide();
             }
@@ -204,7 +203,7 @@ export default {
       }
     },
     createItem() {
-      this.familyname = ''; // フォームを空にする
+      this.familyname = '';
       this.secondname = '';
       this.age = '',
       this.id = null
@@ -225,6 +224,15 @@ export default {
           this.age = profile.age;
         }
       )
+    },
+    methods: {
+      doLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+      },
+      doLogout() {
+        firebase.auth().signOut()
+      }
     }
   }
 }
@@ -236,7 +244,7 @@ export default {
 @import "uikit/src/scss/uikit.scss";
 
 .header {
-  background: #3ab383;
+  background: #f5f5dc;
   color: #fff;
   height: 70px;
   font-family: fantasy;
