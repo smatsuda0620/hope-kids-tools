@@ -4,15 +4,13 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const baseConfig = require('./webpack/webpack.base.config.js');
 
 const config = merge(baseConfig, {
-  mode: 'production',
+  mode: 'development',
   devServer: {
     contentBase: path.resolve(__dirname, 'public')
   },
   devtool: 'inline-source-map',
   plugins: [
-    new BundleAnalyzerPlugin({
-      generateStatsFile: true
-    })
+    new BundleAnalyzerPlugin()
   ]
 });
 

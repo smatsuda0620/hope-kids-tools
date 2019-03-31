@@ -45,7 +45,7 @@
             <div class="uk-width-1-1">
               <label class="uk-form-label">年齢</label>
               <select class="uk-select uk-margin-bottom" placeholder="年齢" v-model="age">
-                <option v-for="item in items" :key = "item.id">
+                <option v-for="item in childPattern" :key = "item.id">
                   {{item.age}}
                 </option>
               </select>
@@ -68,42 +68,35 @@ import firebase from 'firebase'
 import UIkit from 'uikit';
 import Header from 'components/Header'
 import Icons from 'uikit/dist/js/uikit-icons';
+import config from 'config/firebase.json';
 
 UIkit.use(Icons);
 
-const config = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
-};
-
 // Initialize Firebase
 firebase.initializeApp(config);
+
+const youngestAge = 6;
+const oldestAge = 12;
 
 export default {
   components: { Header },
   data() {
     return {
       loading: true,
-      user: {},  // ログインユーザー情報
-      list: [],  // 取得した名簿を入れる配列
-      familyname: '',  // 入力中苗字
-      secondname: '',  // 入力中名前
-      age: '', // 入力中年齢
+      user: {},
+      list: [],
+      familyname: '',
+      secondname: '',
+      age: '',
       id : null,
-      items: [{
-        id: 1,
-        age: 6
-      },{
-        id: 2,
-        age: 7
-      },{
-        id: 3,
-        age: 8
-      }]
+      childPattern:
+        new Array(oldestAge - youngestAge + 1).fill({}).map((value, index) => {
+          return {
+            id: index,
+            age: index + youngestAge
+          }
+        }
+      )
     }
   },
   created() {
@@ -225,14 +218,12 @@ export default {
         }
       )
     },
-    methods: {
-      doLogin() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider)
-      },
-      doLogout() {
-        firebase.auth().signOut()
-      }
+    doLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+    },
+    doLogout() {
+      firebase.auth().signOut()
     }
   }
 }
@@ -242,15 +233,4 @@ export default {
 @import "uikit/src/scss/variables-theme.scss";
 @import "uikit/src/scss/mixins-theme.scss";
 @import "uikit/src/scss/uikit.scss";
-
-.header {
-  background: #f5f5dc;
-  color: #fff;
-  height: 70px;
-  font-family: fantasy;
-}
-
-.header-title {
-  font-family: monospace;
-}
 </style>

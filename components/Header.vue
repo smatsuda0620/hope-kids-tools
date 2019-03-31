@@ -41,3 +41,15 @@ export default {
   }
 }
 </script>
+<style scoped>
+.header {
+  background: #f5f5dc;
+  color: #fff;
+  height: 70px;
+  font-family: fantasy;
+}
+
+.header-title {
+  font-family: monospace;
+}
+</style>

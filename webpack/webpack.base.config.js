@@ -4,10 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'bundle.js'
-  },
   optimization: {
     minimize: true,
   },
@@ -19,6 +15,11 @@ module.exports = {
   ],
   module: {
     rules: [
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+        type: 'javascript/auto'
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -47,7 +48,8 @@ module.exports = {
     ],
     alias: {
       vue$: 'vue/dist/vue.common.js',
-      components: path.resolve(__dirname, '../components')
+      components: path.resolve(__dirname, '../components'),
+      config: path.resolve(__dirname, '../config')
     }
   },
 };
