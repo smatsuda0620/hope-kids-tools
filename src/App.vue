@@ -3,7 +3,6 @@
     <Header :user='user' v-on:login="doLogin()" v-on:logout="doLogout()"></Header>
     <div v-if="loading" class="uk-position-center" uk-spinner="ratio: 3"></div>
     <div v-else>
-      <!-- <Roster :user='user'></Roster> -->
       <router-view :user='user'></router-view>
     </div>
   </div>
