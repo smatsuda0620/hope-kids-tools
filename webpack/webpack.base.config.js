@@ -1,6 +1,7 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
@@ -12,6 +13,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
+    new HardSourceWebpackPlugin()
   ],
   module: {
     rules: [
@@ -48,8 +50,9 @@ module.exports = {
     ],
     alias: {
       vue$: 'vue/dist/vue.common.js',
-      components: path.resolve(__dirname, '../components'),
-      config: path.resolve(__dirname, '../config')
+      components: path.resolve(process.cwd(), 'src/components'),
+      pages: path.resolve(process.cwd(), 'src/pages'),
+      config: path.resolve(process.cwd(), 'config')
     }
   },
 };
