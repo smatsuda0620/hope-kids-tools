@@ -3,6 +3,18 @@
     <Header :user='user' v-on:login="doLogin()" v-on:logout="doLogout()"></Header>
     <div v-if="loading" class="uk-position-center" uk-spinner="ratio: 3"></div>
     <div v-else>
+      <nav class="uk-navbar-container" uk-navbar>
+        <div class="uk-navbar-left">
+            <ul class="uk-navbar-nav">
+              <li class="uk-active">
+                <router-link to="/roster">名簿</router-link>
+              </li>
+              <li>
+                <router-link to="/record">出席簿</router-link>
+              </li>
+            </ul>
+        </div>
+      </nav>
       <router-view :user='user'></router-view>
     </div>
   </div>
@@ -20,8 +32,8 @@ const youngestAge = 6;
 const oldestAge = 12;
 
 export default {
-  components: { 
-    Header 
+  components: {
+    Header
   },
   router,
   data() {
