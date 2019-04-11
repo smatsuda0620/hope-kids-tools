@@ -45,8 +45,6 @@ export default {
         })
       })
     })
-
-    console.log(this.kidsList);
   },
   methods: {
     optionChange: function() {
