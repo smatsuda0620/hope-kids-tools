@@ -62,7 +62,8 @@ module.exports = {
       vue$: 'vue/dist/vue.common.js',
       components: path.resolve(process.cwd(), 'src/components'),
       pages: path.resolve(process.cwd(), 'src/pages'),
-      config: path.resolve(process.cwd(), 'config')
+      config: path.resolve(process.cwd(), 'config'),
+      message: path.resolve(process.cwd(), 'src/messages')
     }
   },
 };
